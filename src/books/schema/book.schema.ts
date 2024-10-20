@@ -3,7 +3,7 @@ import mongoose, { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Book extends Document {
-  @Prop({ required: true })
+  @Prop({ unique: true })
   title: string;
 
   @Prop({ required: true })
