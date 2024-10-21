@@ -7,11 +7,17 @@ export class User extends Document {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   age: number;
 
+  @Prop({ required: true })
+  email: string;
+
+  @Prop({ required: true })
+  password: string;
+
   @Prop({
-    required: true,
+    required: false,
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: Book.name }],
   })
   books: mongoose.Schema.Types.ObjectId[];

@@ -1,4 +1,11 @@
-import { IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  MinLength,
+} from 'class-validator';
 import mongoose from 'mongoose';
 
 export class CreateUserDto {
@@ -8,8 +15,16 @@ export class CreateUserDto {
 
   @IsNumber()
   @IsNotEmpty()
-  age: number;
+  age?: number;
+
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsNotEmpty()
+  @MinLength(8)
+  password: string;
 
   @IsMongoId({ each: true })
-  books: mongoose.Schema.Types.ObjectId[];
+  books?: mongoose.Schema.Types.ObjectId[];
 }

@@ -73,4 +73,11 @@ export class UsersService {
 
     return deleteUser;
   }
+
+  findUserWithCredentials(email: string) {
+    return this.userModel
+      .findOne({ email })
+      .select(['email', 'password'])
+      .exec();
+  }
 }
