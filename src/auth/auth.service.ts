@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { JwtService } from '@nestjs/jwt';
+import { SignUpTypes, SignInTypes } from 'src/types/auth.types';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +17,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto) {
+  async signUp(signUpDto: SignUpDto): Promise<SignUpTypes> {
     const { email, password } = signUpDto;
 
     const emailInUse = await this.userService.findUserWithCredentials(email);
@@ -38,7 +39,7 @@ export class AuthService {
     return { message: 'User created successfully', user: createdUser };
   }
 
-  async signIn(signInDto: SignInDto) {
+  async signIn(signInDto: SignInDto): Promise<SignInTypes> {
     const { email, password } = signInDto;
 
     const user = await this.userService.findUserWithCredentials(email);
@@ -50,11 +51,17 @@ export class AuthService {
     if (!arePasswordEqual) throw new UnauthorizedException('Wrong credentials');
 
     const jwtPayLoad = {
-      user: user._id,
+      email: user.email,
+      UserId: user._id,
+      userName: user.name,
     };
 
     const access_token = await this.jwtService.sign(jwtPayLoad);
 
     return { access_token };
+  }
+
+  getProfile(email: string) {
+    return this.userService.findByEmail(email);
   }
 }

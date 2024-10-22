@@ -80,4 +80,8 @@ export class UsersService {
       .select(['email', 'password'])
       .exec();
   }
+
+  findByEmail(email: string) {
+    return this.userModel.findOne({ email }).select(['email', 'name']).exec();
+  }
 }
