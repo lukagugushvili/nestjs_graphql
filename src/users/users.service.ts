@@ -16,7 +16,7 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<CreateUserDto> {
+  async create(createUserDto: CreateUserDto) {
     try {
       const createUser = await this.userModel.create(createUserDto);
 
@@ -27,7 +27,7 @@ export class UsersService {
     }
   }
 
-  async getAll(): Promise<User[]> {
+  async getAll() {
     const users = await this.userModel.find().exec();
 
     if (!users || users.length === 0) {
@@ -37,7 +37,7 @@ export class UsersService {
     return users;
   }
 
-  async getById(isMongoIdParam: IsMongoIdParam): Promise<User> {
+  async getById(isMongoIdParam: IsMongoIdParam) {
     const { id } = isMongoIdParam;
 
     const findById = await this.userModel.findById(id).exec();
@@ -47,10 +47,7 @@ export class UsersService {
     return findById;
   }
 
-  async update(
-    isMongoIdParam: IsMongoIdParam,
-    updateUserDto: UpdateUserDto,
-  ): Promise<UpdateUserDto> {
+  async update(isMongoIdParam: IsMongoIdParam, updateUserDto: UpdateUserDto) {
     const { id } = isMongoIdParam;
 
     const updateUser = await this.userModel
@@ -62,7 +59,7 @@ export class UsersService {
     return updateUser;
   }
 
-  async remove(isMongoIdParam: IsMongoIdParam): Promise<User> {
+  async remove(isMongoIdParam: IsMongoIdParam) {
     const { id } = isMongoIdParam;
 
     const deleteUser = await this.userModel.findByIdAndDelete(id).exec();

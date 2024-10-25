@@ -16,7 +16,7 @@ export class BookService {
     @InjectModel(Book.name) private readonly bookModel: Model<Book>,
   ) {}
 
-  async create(createBookDto: CreateBookDto): Promise<CreateBookDto> {
+  async create(createBookDto: CreateBookDto) {
     try {
       const existingBook = await this.bookModel
         .findOne({ title: createBookDto.title })
@@ -35,7 +35,7 @@ export class BookService {
     }
   }
 
-  async getAll(): Promise<Book[]> {
+  async getAll() {
     const books = await this.bookModel.find().exec();
 
     if (!books || books.length === 0) {
@@ -45,7 +45,7 @@ export class BookService {
     return books;
   }
 
-  async getById(isMongoIdParam: IsMongoIdParam): Promise<Book> {
+  async getById(isMongoIdParam: IsMongoIdParam) {
     const { id } = isMongoIdParam;
 
     const findById = await this.bookModel.findById(id).exec();
@@ -55,10 +55,7 @@ export class BookService {
     return findById;
   }
 
-  async update(
-    isMongoIdParam: IsMongoIdParam,
-    updateBookDto: UpdateBookDto,
-  ): Promise<UpdateBookDto> {
+  async update(isMongoIdParam: IsMongoIdParam, updateBookDto: UpdateBookDto) {
     const { id } = isMongoIdParam;
 
     const updateBook = await this.bookModel
@@ -70,7 +67,7 @@ export class BookService {
     return updateBook;
   }
 
-  async remove(isMongoIdParam: IsMongoIdParam): Promise<Book> {
+  async remove(isMongoIdParam: IsMongoIdParam) {
     const { id } = isMongoIdParam;
 
     const deleteBook = await this.bookModel.findByIdAndDelete(id).exec();
