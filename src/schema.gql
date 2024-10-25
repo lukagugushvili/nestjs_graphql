@@ -1,0 +1,42 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  _id: ID!
+  name: String!
+  age: Float!
+  email: String!
+  books: [Book!]!
+}
+
+type Book {
+  title: String!
+  author: String!
+  cost: Float!
+  user: User!
+}
+
+type SignUpPayLoad {
+  success: Boolean!
+  message: String!
+}
+
+type SignInPayLoad {
+  access_token: String!
+}
+
+type Query {
+  getProfile: User!
+}
+
+type Mutation {
+  signUp(signUp: SignUpInput!): SignUpPayLoad!
+  signIn(signIn: SignUpInput!): SignInPayLoad!
+}
+
+input SignUpInput {
+  name: String!
+  email: String!
+  password: String!
+}

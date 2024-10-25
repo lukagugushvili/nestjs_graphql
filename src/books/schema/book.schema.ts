@@ -1,18 +1,29 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
+import { User } from 'src/users/schema/user.schema';
 
+@ObjectType()
 @Schema({ timestamps: true })
 export class Book extends Document {
+  @Field()
   @Prop({ unique: true })
   title: string;
 
+  @Field()
   @Prop({ required: true })
   author: string;
 
+  @Field()
   @Prop({ required: true })
   cost: number;
 
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  @Field(() => User)
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+  })
   user: mongoose.Schema.Types.ObjectId;
 }
 
