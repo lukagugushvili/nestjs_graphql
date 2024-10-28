@@ -11,6 +11,7 @@ type User {
 }
 
 type Book {
+  _id: ID!
   title: String!
   author: String!
   cost: Float!
@@ -27,12 +28,35 @@ type SignInPayLoad {
 }
 
 type Query {
+  getAllBooks: [Book!]!
+  getById(bookIdInput: IsMongoIdParam!): Book!
   getProfile: User!
 }
 
+input IsMongoIdParam {
+  id: String!
+}
+
 type Mutation {
+  createBook(createBookInput: CreateBookDto!): Book!
+  updateBook(updateBookInputId: IsMongoIdParam!, updateBookInput: UpdateBookDto!): Book!
+  deleteBook(bookInput: IsMongoIdParam!): Book!
   signUp(signUp: SignUpInput!): SignUpPayLoad!
   signIn(signIn: SignUpInput!): SignInPayLoad!
+}
+
+input CreateBookDto {
+  title: String!
+  author: String!
+  cost: Float!
+  user: ID!
+}
+
+input UpdateBookDto {
+  title: String
+  author: String
+  cost: Float
+  user: ID
 }
 
 input SignUpInput {

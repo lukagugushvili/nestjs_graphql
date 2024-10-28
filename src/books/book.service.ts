@@ -9,14 +9,17 @@ import { Model } from 'mongoose';
 import { CreateBookDto } from './dto/create-book.dto';
 import { IsMongoIdParam } from './dto/mongo-id-param.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class BookService {
+  private readonly logger = new Logger(BookService.name);
+
   constructor(
     @InjectModel(Book.name) private readonly bookModel: Model<Book>,
   ) {}
 
-  async create(createBookDto: CreateBookDto) {
+  async create(createBookDto: CreateBookDto): Promise<Book> {
     try {
       const existingBook = await this.bookModel
         .findOne({ title: createBookDto.title })
@@ -30,12 +33,12 @@ export class BookService {
 
       return createBook;
     } catch (error) {
-      console.error('Error creating book', error);
+      this.logger.error('Error creating book', error);
       throw new BadRequestException('Error saving book', error);
     }
   }
 
-  async getAll() {
+  async getAll(): Promise<Book[]> {
     const books = await this.bookModel.find().exec();
 
     if (!books || books.length === 0) {
@@ -45,17 +48,20 @@ export class BookService {
     return books;
   }
 
-  async getById(isMongoIdParam: IsMongoIdParam) {
+  async findBookById(isMongoIdParam: IsMongoIdParam): Promise<Book> {
     const { id } = isMongoIdParam;
 
-    const findById = await this.bookModel.findById(id).exec();
+    const book = await this.bookModel.findById(id).exec();
 
-    if (!findById) throw new NotFoundException(`Book with ID: ${id} not found`);
+    if (!book) throw new NotFoundException(`Book with ID: ${id} not found`);
 
-    return findById;
+    return book;
   }
 
-  async update(isMongoIdParam: IsMongoIdParam, updateBookDto: UpdateBookDto) {
+  async update(
+    isMongoIdParam: IsMongoIdParam,
+    updateBookDto: UpdateBookDto,
+  ): Promise<Book> {
     const { id } = isMongoIdParam;
 
     const updateBook = await this.bookModel
@@ -67,7 +73,7 @@ export class BookService {
     return updateBook;
   }
 
-  async remove(isMongoIdParam: IsMongoIdParam) {
+  async remove(isMongoIdParam: IsMongoIdParam): Promise<Book> {
     const { id } = isMongoIdParam;
 
     const deleteBook = await this.bookModel.findByIdAndDelete(id).exec();
